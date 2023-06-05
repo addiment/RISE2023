@@ -1,0 +1,34 @@
+"In Game Actions"
+{
+	"actions"
+	{
+		"InGameControls"
+		{
+			"title"					"#Set_Ingame"
+			"StickPadGyro"
+			{
+				"TiltCube" // Action name
+				{
+					"title"			"#Action_TiltCube" // Action title
+					"input_mode"	"absolute_mouse"
+				}
+			}
+			"Button"
+			{
+				"ResetCamera"	"#Action_ResetCamera"
+			}
+		}
+	}
+	"localization"
+	{
+		"english"
+		{
+			"Title_Config1"		"Officially Configurated Configuration"
+			"Description_Config1"	"This config was created by idiots."
+
+			"Set_Ingame"			"In-Game Controls"
+			"Action_TiltCube"			"Tilt Cube"
+			"Action_ResetCamera"		"Reset Camera"
+		}
+	}
+}
