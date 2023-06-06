@@ -2,20 +2,33 @@
 {
 	"actions"
 	{
-		"InGameControls"
+		"GameControls"
 		{
-			"title"					"#Set_Ingame"
+			"title"					"#Set_GameControls"
 			"StickPadGyro"
 			{
-				"TiltCube" // Action name
+				"AnalogControls" // Action name
 				{
-					"title"			"#Action_TiltCube" // Action title
-					"input_mode"	"absolute_mouse"
+					"title"			"#Action_AnalogControls" // Action title
+					"input_mode"	"joystick_move"
 				}
 			}
 			"Button"
 			{
-				"ResetCamera"	"#Action_ResetCamera"
+				"jump"	"#Action_Jump"
+			}
+		}
+		"MenuControls"
+		{
+			"title"					"#Set_MenuControls"
+			"Button"
+			{
+				"menu_up"		"#Action_MenuUp"
+				"menu_down"		"#Action_MenuDown"
+				"menu_left"		"#Action_MenuLeft"
+				"menu_right"	"#Action_MenuRight"
+				"menu_select"	"#Action_MenuSelect"
+				"menu_cancel"	"#Action_MenuCancel"
 			}
 		}
 	}
@@ -26,9 +39,19 @@
 			"Title_Config1"		"Officially Configurated Configuration"
 			"Description_Config1"	"This config was created by idiots."
 
-			"Set_Ingame"			"In-Game Controls"
-			"Action_TiltCube"			"Tilt Cube"
-			"Action_ResetCamera"		"Reset Camera"
+			"Set_GameControls"			"In-Game Controls"
+			"Set_MenuControls"			"Menu Controls"
+
+			"Action_AnalogControls" 	"Analog Controls"
+
+			"Action_Jump"				"Jump"
+
+			"Action_MenuUp"				"Menu Up"
+			"Action_MenuDown"			"Menu Down"
+			"Action_MenuLeft"			"Menu Left"
+			"Action_MenuRight"			"Menu Right"
+			"Action_MenuSelect"			"Menu Select"
+			"Action_MenuCancel"			"Menu Cancel"
 		}
 	}
 }

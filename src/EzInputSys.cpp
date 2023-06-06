@@ -1,45 +1,79 @@
 #include "EzInputSys.h"
-#include <steam/steam_api.h>
-#include <steam/isteaminput.h>
 
 using namespace std;
 
-static SDL_GameController*          activeGameController = nullptr;
-static InputHandle_t                activeSteamControllerHandle;
-static InputActionSetHandle_t       actionSetHandles    [(size_t)InputSystem::ActionSet::NumSets        ];
-static InputAnalogActionHandle_t    analogActionHandles [(size_t)InputSystem::AnalogAction::NumActions  ];
-static InputDigitalActionHandle_t   digitalActionHandles[(size_t)InputSystem::DigitalAction::NumActions ];
+//static SDL_GameController*          activeGameController = nullptr;
+SMOG_InputHandle               activeSmogControllerHandle;
+SMOG_InputHandle               handles[SMOG_MAX_INPUT_HANDLES]{};
+SMOG_ActionSetHandle     actionSetHandles    [(size_t)InputSystem::ActionSet::NumSets        ]{};
+SMOG_AnalogActionHandle  analogActionHandles [(size_t)InputSystem::AnalogAction::NumActions  ]{};
+SMOG_DigitalActionHandle digitalActionHandles[(size_t)InputSystem::DigitalAction::NumActions ]{};
+
+InputSystem::ActionSet activeActionSet;
 
 void InputSystem::init() {
+
     // Digital actions
-    digitalActionHandles[(size_t)InputSystem::DigitalAction::Jump           ] = SteamInput()->GetDigitalActionHandle("jump");
-    digitalActionHandles[(size_t)InputSystem::DigitalAction::PauseMenu      ] = SteamInput()->GetDigitalActionHandle("pause_menu");
-    digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuUp         ] = SteamInput()->GetDigitalActionHandle("menu_up");
-    digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuDown       ] = SteamInput()->GetDigitalActionHandle("menu_down");
-    digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuLeft       ] = SteamInput()->GetDigitalActionHandle("menu_left");
-    digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuRight      ] = SteamInput()->GetDigitalActionHandle("menu_right");
-    digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuSelect     ] = SteamInput()->GetDigitalActionHandle("menu_select");
-    digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuCancel     ] = SteamInput()->GetDigitalActionHandle("menu_cancel");
+    digitalActionHandles[(size_t)InputSystem::DigitalAction::Jump           ] = SMOG_GetDigitalActionHandle("jump");
+//    digitalActionHandles[(size_t)InputSystem::DigitalAction::PauseMenu      ] = SteamInput_GetDigitalActionHandle("pause_menu"); // WRONG
+    digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuUp         ] = SMOG_GetDigitalActionHandle("menu_up");
+    digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuDown       ] = SMOG_GetDigitalActionHandle("menu_down");
+    digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuLeft       ] = SMOG_GetDigitalActionHandle("menu_left");
+    digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuRight      ] = SMOG_GetDigitalActionHandle("menu_right");
+    digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuSelect     ] = SMOG_GetDigitalActionHandle("menu_select");
+    digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuCancel     ] = SMOG_GetDigitalActionHandle("menu_cancel");
     // Analog actions
-    analogActionHandles[(size_t)InputSystem::AnalogAction::AnalogControls   ] = SteamInput()->GetAnalogActionHandle ( "analog_controls");
+    analogActionHandles[(size_t)InputSystem::AnalogAction::AnalogControls   ] = SMOG_GetAnalogActionHandle ( "AnalogControls");
     // Action set handles
-    actionSetHandles[(size_t)InputSystem::ActionSet::GameControls           ] = SteamInput()->GetActionSetHandle("ship_controls");
-    actionSetHandles[(size_t)InputSystem::ActionSet::MenuControls           ] = SteamInput()->GetActionSetHandle("menu_controls");
+    actionSetHandles[(size_t)InputSystem::ActionSet::GameControls           ] = SMOG_GetActionSetHandle("GameControls");
+    actionSetHandles[(size_t)InputSystem::ActionSet::MenuControls           ] = SMOG_GetActionSetHandle("MenuControls");
 }
 
 void InputSystem::update() {
-    // TODO: this is old code, clean it up
-    inputHandleCount = SteamInput()->GetConnectedControllers(inputHandles);
-    if (inputHandleCount != lastInputHandleCount) {
-        lastInputHandleCount = inputHandleCount;
-        updateInputHandles(); // Required for connecting controllers after game launch
+    // TODO: this comment is from Spacewar, consider?
+    // There's a bug where the action handles aren't non-zero until a config is done loading. Soon config
+    // information will be available immediately. Until then try to init as long as the handles are invalid.
+
+    int numHandles = SMOG_GetConnectedControllers(handles);
+    // If there's an active controller, and if we're not already using it, select the first one.
+    if (numHandles && (activeSmogControllerHandle != handles[0])) {
+        activeSmogControllerHandle = handles[0];
     }
-    SteamInput()->RunFrame();
-    for (int i = 0; i < STEAM_INPUT_MAX_COUNT; i++) {
-        if (inputHandles[i] == 0) continue; // Skip invalid handles
-        SteamInput()->ActivateActionSet(inputHandles[i], actionSet);
-        // TODO: replace with for(:), this should be more dynamic
-        InputAnalogActionData_t gyroData = SteamInput()->GetAnalogActionData(inputHandles[i], TiltCube);
-        InputDigitalActionData_t resetData = SteamInput()->GetDigitalActionData(inputHandles[i], ResetCamera);
+
+//    for (int i = 0; i < STEAM_INPUT_MAX_COUNT; i++) {
+//        if (handles[i] == 0) continue; // Skip invalid handles
+//        SteamInput_ActivateActionSet(inputHandles[i], actionSet);
+//        // TODO: replace with for(:), this should be more dynamic
+//        InputAnalogActionData_t gyroData = SteamInput_GetAnalogActionData(inputHandles[i], TiltCube);
+//        InputDigitalActionData_t resetData = SteamInput_GetDigitalActionData(inputHandles[i], ResetCamera);
+//    }
+}
+
+void InputSystem::setActionSet(ActionSet set) {
+    activeActionSet = set;
+    SMOG_ActivateActionSet(activeSmogControllerHandle, actionSetHandles[(size_t)set]);
+}
+
+FVec2 InputSystem::getAnalogActionValue(AnalogAction action) {
+    SMOG_AnalogActionHandle h = analogActionHandles[(size_t)action];
+    if (h && activeSmogControllerHandle) {
+        SMOG_AnalogActionData data = SMOG_GetAnalogActionData(activeSmogControllerHandle, h);
+        return {data.x, data.y};
+    } else return { 0, 0 };
+}
+
+bool InputSystem::getDigitalActionValue(DigitalAction action) {
+    SMOG_DigitalActionHandle h = digitalActionHandles[(size_t)action];
+    if (h && activeSmogControllerHandle) {
+        printf("returning state\n");
+        SMOG_DigitalActionData data = SMOG_GetDigitalActionData(activeSmogControllerHandle, h);
+        return data.bState;
+    } else {
+        printf("h = %llu, ascm = %llu\n", h, activeSmogControllerHandle);
+        return false;
     }
+}
+
+InputSystem::ActionSet InputSystem::getCurrentActionSet() {
+    return activeActionSet;
 }

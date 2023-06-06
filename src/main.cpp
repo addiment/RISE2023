@@ -7,5 +7,5 @@ int main(int argc, char* argv[]) {
 #ifdef NDEBUG
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
 #endif
-    return Manager::play(argc, argv);
+    return Manager()->play(argc, argv);
 }

@@ -10,18 +10,29 @@
 
 int main(int argc, char* argv[]);
 
+class Manager;
+// Singleton accessor
+inline class Manager* Manager();
+
 class Manager {
 public:
-    static bool isRunning;
-    static SDL_Window* window;
-//    static SDL_GLContext context;
-    static SDL_Renderer* renderer;
+    bool isRunning = true;
+    SDL_Window* window = nullptr;
+    // SDL_GLContext context;
+    SDL_Renderer* renderer = nullptr;
 
-    static int play(int argc, char* argv[]);
+    int play(int argc, char* argv[]);
 private:
-    static int init();
-    static void shutdown();
-    static void tick();
+    friend inline class Manager* Manager() {
+        static class Manager* global = nullptr;
+        if (!global) global = new class Manager();
+        return global;
+    }
+    Manager() = default;
+    int init();
+    void shutdown();
+    void tick();
 };
+
 
 #endif // TOOLKITENGINEV3_MANAGER_H

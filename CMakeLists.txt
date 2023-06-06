@@ -59,10 +59,11 @@ endif()
 
 # END STEAMWORKS STUFF
 
-
+add_subdirectory(smog)
 
 include_directories(${SDL2_INCLUDE_DIRS} ${STEAMWORKS_INCLUDE_DIRS})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mconsole -O2 -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mconsole -Wall")
+# -O2
 add_executable(${PROJECT_NAME}
     res/toolkit.rc
 
@@ -70,6 +71,11 @@ add_executable(${PROJECT_NAME}
     src/Nickable.cpp
     src/Nickable.cpp
     src/aecs.cpp
+    src/Scene.cpp
+    src/Manager.cpp
+    src/EzInputSys.cpp
+
+    include/actors/Player.cpp
 
     include/Mesh.h
     include/Material.h
@@ -79,5 +85,10 @@ add_executable(${PROJECT_NAME}
     include/Nickable.h
     include/misc.h
     include/aecs.h
-    include/Camera.h include/Manager.h include/Scene.h include/scenes/LightTest.h src/Scene.cpp src/Manager.cpp include/actors/Player.cpp include/EzInputSys.h src/EzInputSys.cpp)
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${STEAMWORKS_LIBRARIES})
+    include/Camera.h
+    include/Manager.h
+    include/Scene.h
+    include/scenes/LightTest.h
+    include/EzInputSys.h
+)
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${STEAMWORKS_LIBRARIES} SMOG)

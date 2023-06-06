@@ -5,11 +5,6 @@
 
 using namespace std;
 
-bool             Manager::isRunning = true;
-SDL_Window*      Manager::window = nullptr;
-//SDL_GLContext    Manager::context = nullptr;
-SDL_Renderer*    Manager::renderer = nullptr;
-
 int Manager::play(int argc, char* argv[]) {
 
 #ifdef NDEBUG
@@ -37,9 +32,9 @@ int Manager::init() {
         return 1;
     }
     // Initialize Steam Input
-    if (!SteamInput()->Init(true)) {
+    if (!SteamInput()->Init(false)) {
         SDL_LogCritical(SDL_LOG_CATEGORY_INPUT, "Failed to initialize Steam Input!");
-        return 0;
+        return 1;
     }
 #endif // USE_STEAM
 
@@ -69,6 +64,8 @@ int Manager::init() {
     }
 
     SDL_Log("initialized");
+
+    InputSystem()->init();
 
     return 0;
 }
@@ -125,6 +122,8 @@ void Manager::tick() {
     SteamAPI_RunCallbacks();
 #endif // USE_STEAM
 
+    InputSystem()->update();
+
     // Actors
     {
         {
@@ -158,6 +157,13 @@ void Manager::tick() {
     SDL_SetRenderDrawColor(renderer, 0.f, 0.f, 0.f, 0.f);
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+    // render
+    SDL_Rect rect = {100, 100, 480, 480 };
+    FVec2 data = InputSystem()->getAnalogActionValue(InputSystem::AnalogAction::AnalogControls);
+    printf("data: { %f, %f }\n", data.x, data.y);
+    SDL_SetRenderDrawColor(renderer, uint8_t(data.x * float(0xFF)), uint8_t(data.y * float(0xFF)), 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRect(renderer, &rect);
 
     SDL_RenderPresent(renderer);
 #ifdef NDEBUG
