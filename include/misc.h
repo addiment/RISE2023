@@ -14,6 +14,12 @@
 
 #define DEBUG_LINECHECK SDL_Log("%s line %d", __FILE_NAME__, __LINE__);
 
+namespace Alib {
+    template<typename T, typename... TAs>
+    using Function = T (*)(TAs...);
+    using Callback = void (*)(void);
+}
+
 typedef struct FVec2 {
     FVec2(float px, float py) : x(px), y(py) {};
     float x = 0.0, y = 0.0;

@@ -1,9 +1,7 @@
-#include "aecs.h"
+#include "aces.h"
+#include "Scene.h"
 
 using namespace std;
-
-std::map<Actor::ID, Actor*> Actor::actors{};
-std::deque<Actor::ID> Actor::fragments{};
 
 // clang-tidy thinks this is recursive. Sorta? Not really.
 // Every entity should render its children because only the root entities (actors) will be explicitly requested to render by the engine
@@ -28,8 +26,8 @@ Entity *Entity::getParent() {
     return parent;
 }
 
-Actor::Actor() : id(reserveId()) {
-    actors[id] = this;
+Actor::Actor() : id((Scene::getScene() ? Scene::getScene()->reserveId() : 0)) {
+    Scene::getScene()->actors[id] = this;
 }
 
 Actor::~Actor() {
@@ -37,13 +35,3 @@ Actor::~Actor() {
 }
 
 bool Actor::isMarkedForDeath() { return markedForDeath; }
-
-Actor::ID Actor::reserveId()  {
-    if (fragments.empty()) {
-        return (ID)actors.size();
-    } else {
-        ID top = fragments.front();
-        fragments.pop_front();
-        return top;
-    }
-}

@@ -3,35 +3,26 @@
 #define TOOLKITENGINEV3_MANAGER_H
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include "aces.h"
 #include "tkev3.h"
-#include "aecs.h"
+#include "Scene.h"
 
 #define USE_STEAM
 
-int main(int argc, char* argv[]);
-
-class Manager;
-// Singleton accessor
-inline class Manager* Manager();
-
 class Manager {
 public:
-    bool isRunning = true;
-    SDL_Window* window = nullptr;
+    static bool isRunning;
+    static SDL_Window* window;
     // SDL_GLContext context;
-    SDL_Renderer* renderer = nullptr;
+    static SDL_Renderer* renderer;
 
-    int play(int argc, char* argv[]);
+    static int play(int argc, char* argv[], Scene* scene);
 private:
-    friend inline class Manager* Manager() {
-        static class Manager* global = nullptr;
-        if (!global) global = new class Manager();
-        return global;
-    }
     Manager() = default;
-    int init();
-    void shutdown();
-    void tick();
+    static int init();
+    static void shutdown();
+    static void tick();
 };
 
 

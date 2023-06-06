@@ -5,7 +5,12 @@
 
 using namespace std;
 
-int Manager::play(int argc, char* argv[]) {
+bool Manager::isRunning = true;
+SDL_Window* Manager::window = nullptr;
+// SDL_GLContext context;
+SDL_Renderer* Manager::renderer = nullptr;
+
+int Manager::play(int argc, char* argv[], Scene* scene) {
 
 #ifdef NDEBUG
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
@@ -15,6 +20,9 @@ int Manager::play(int argc, char* argv[]) {
         int i = Manager::init();
         if (i) return i;
     }
+
+    // SET THE INITIAL SCENE
+    Scene::changeScene(scene);
 
     while (isRunning) tick();
 
@@ -47,11 +55,21 @@ int Manager::init() {
             return res;
         }
     }
+
+    {
+        int flags = IMG_INIT_PNG;
+        int res = IMG_Init(flags);
+        if (res != flags) {
+            SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL_image: %s", SDL_GetError());
+            return (res ? res : 1);
+        }
+    }
+
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetSwapInterval(1);
 
-    window = SDL_CreateWindow("OpenGL Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, (int)windowSize.w, (int)windowSize.h, SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+    window = SDL_CreateWindow("Platformer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, (int)windowSize.w, (int)windowSize.h, SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
     if (window == nullptr) {
         SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to create window: %s", SDL_GetError());
         return 1;
@@ -84,17 +102,6 @@ void Manager::shutdown() {
 }
 
 void Manager::tick() {
-//    //Check for joysticks
-//    if (SDL_NumJoysticks() > 0) {
-//        //Load joystick
-//        if (SDL_IsGameController(0)) {
-//            InputSystem::currentController = SDL_GameControllerOpen(0);
-//            if (InputSystem::currentController == nullptr) {
-//                SDL_LogError(SDL_LOG_CATEGORY_INPUT, "Failed to open game controller @ index 0: %s", SDL_GetError());
-//            }
-//        }
-//    }
-
     SDL_Event ev;
     while (SDL_PollEvent(&ev)) {
         switch (ev.type) {
@@ -118,6 +125,8 @@ void Manager::tick() {
         }
     }
 
+    double delta = 1.0;
+
 #ifdef USE_STEAM
     SteamAPI_RunCallbacks();
 #endif // USE_STEAM
@@ -127,26 +136,28 @@ void Manager::tick() {
     // Actors
     {
         {
-
+            for (auto & actor : Scene::getScene()->actors) {
+                actor.second->update(delta);
+            }
         }
         // cleanup
         {
             queue<Actor*> markeds{};
-            for (auto & actor : Actor::actors)
+            for (auto & actor : Scene::getScene()->actors)
                 if (actor.second->isMarkedForDeath()) markeds.push(actor.second);
 
             using ID = Actor::ID;
             while (!markeds.empty()) {
                 Actor *e = markeds.front();
                 ID aid = e->id;
-                Actor::actors.erase(aid);
-                ID m = Actor::actors.rbegin()->first;
+                Scene::getScene()->actors.erase(aid);
+                ID m = Scene::getScene()->actors.rbegin()->first;
                 if (m < aid) {
                     // at the end of the map, not fragmented
                     // retroactively clean up fragments (this is why fragments is a deque, not a queue)
-                    while (m < Actor::fragments.back()) Actor::fragments.pop_back();
+                    while (m < Scene::getScene()->fragments.back()) Scene::getScene()->fragments.pop_back();
                 } else {
-                    Actor::fragments.push_back(aid);
+                    Scene::getScene()->fragments.push_back(aid);
                 }
                 delete e;
                 markeds.pop();
@@ -158,12 +169,9 @@ void Manager::tick() {
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-    // render
-    SDL_Rect rect = {100, 100, 480, 480 };
-    FVec2 data = InputSystem()->getAnalogActionValue(InputSystem::AnalogAction::AnalogControls);
-    printf("data: { %f, %f }\n", data.x, data.y);
-    SDL_SetRenderDrawColor(renderer, uint8_t(data.x * float(0xFF)), uint8_t(data.y * float(0xFF)), 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderFillRect(renderer, &rect);
+    for (auto & actor : Scene::getScene()->actors) {
+        actor.second->render();
+    }
 
     SDL_RenderPresent(renderer);
 #ifdef NDEBUG

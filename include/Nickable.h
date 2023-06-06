@@ -1,7 +1,6 @@
+#pragma once
 #ifndef TOOLKITENGINEV3_NICKABLE_H
 #define TOOLKITENGINEV3_NICKABLE_H
-
-
 
 class Nickable {
 public:

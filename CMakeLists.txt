@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(src include)
 
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
 
 add_compile_options(-Wall -O2)
 add_link_options(-O2)
@@ -61,7 +62,7 @@ endif()
 
 add_subdirectory(smog)
 
-include_directories(${SDL2_INCLUDE_DIRS} ${STEAMWORKS_INCLUDE_DIRS})
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS} ${STEAMWORKS_INCLUDE_DIRS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mconsole -Wall")
 # -O2
 add_executable(${PROJECT_NAME}
@@ -77,18 +78,14 @@ add_executable(${PROJECT_NAME}
 
     include/actors/Player.cpp
 
-    include/Mesh.h
-    include/Material.h
-    include/Texture.h
     include/tkev3.h
-    include/Shader.h
     include/Nickable.h
     include/misc.h
-    include/aecs.h
+    include/aces.h
     include/Camera.h
     include/Manager.h
     include/Scene.h
-    include/scenes/LightTest.h
+    include/scenes/Test.h
     include/EzInputSys.h
-)
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${STEAMWORKS_LIBRARIES} SMOG)
+    include/components/Sprite.h include/SpriteSheet.h src/SpriteSheet.cpp src/Camera.cpp)
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${STEAMWORKS_LIBRARIES} SMOG)
