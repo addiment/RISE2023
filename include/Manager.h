@@ -9,6 +9,9 @@
 // forward decls.
 class Camera;
 
+// DEFINE THIS IN YOUR MAIN.CPP
+void EnginePostInit();
+
 class Manager {
 public:
     static bool isRunning;

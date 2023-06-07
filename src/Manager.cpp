@@ -28,6 +28,9 @@ int Manager::play(int argc, char* argv[], Scene* initialScene) {
         if (i) return i;
     }
 
+    // handoff
+    EnginePostInit();
+
     // SET THE INITIAL SCENE
     changeScene(initialScene);
 
