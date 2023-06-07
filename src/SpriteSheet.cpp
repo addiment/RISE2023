@@ -1,3 +1,3 @@
 #include "SpriteSheet.h"
 
-SpriteSheet SpriteSheet::sheets[(size_t)Sheet::NUM_SHEETS]{};
+EnumArray<SpriteSheet::SheetEnum, SpriteSheet> SpriteSheet::sheets{(size_t)NUM_SHEETS};;

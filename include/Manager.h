@@ -4,11 +4,10 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "aces.h"
-#include "tkev3.h"
 #include "Scene.h"
 
-#define USE_STEAM
+// forward decls.
+class Camera;
 
 class Manager {
 public:
@@ -17,12 +16,27 @@ public:
     // SDL_GLContext context;
     static SDL_Renderer* renderer;
 
-    static int play(int argc, char* argv[], Scene* scene);
-    [[nodiscard]] static Scene *getScene();
+    // engine entry point
+    static int play(int argc, char* argv[], Scene* initialScene);
+    // returns the current scene
+    [[nodiscard]] static inline Scene *getScene() { return currentScene; }
+    // changes the scene
     static void changeScene(Scene *scene);
+    // calls the function of the same name on the current scene
+    [[nodiscard]] RETURN_MAY_BE_NULL static inline Camera* getActiveCamera() {
+        if (!currentScene) return nullptr;
+        else return currentScene->activeCamera;
+    }
+    // calls the function of the same name on the current scene
+    [[nodiscard]] RETURN_MAY_BE_NULL static inline Pawn* getActivePawn() {
+        if (!currentScene) return nullptr;
+        else return currentScene->activePawn;
+    }
 private:
     Manager() = default;
+
     static Scene *currentScene;
+
     static int init();
     static void shutdown();
     static void tick();

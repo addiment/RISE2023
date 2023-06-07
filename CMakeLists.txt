@@ -3,19 +3,24 @@ project(RISE)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_SYSTEM_NAME Generic)
+
+add_subdirectory(smog)
+
 include_directories(src include)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 
 add_compile_options(-Wall -O2)
-add_link_options(-O2)
+add_link_options(-O2) # add flto if lld
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DCMAKE_BUILD_DEBUG")
 
 # use -DBUILD_ARCH with x64 or x86
 if(NOT DEFINED BUILD_ARCH)
     set(BUILD_ARCH "x64")
 endif()
-
 
 # BEGIN STEAMWORKS STUFF
 
@@ -60,8 +65,6 @@ endif()
 
 # END STEAMWORKS STUFF
 
-add_subdirectory(smog)
-
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS} ${STEAMWORKS_INCLUDE_DIRS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mconsole -Wall")
 # -O2
@@ -71,12 +74,12 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
     src/Nickable.cpp
     src/Nickable.cpp
-    src/aecs.cpp
+    src/aces.cpp
     src/Scene.cpp
     src/Manager.cpp
     src/EzInputSys.cpp
 
-    include/actors/Player.cpp
+    include/actors/Player.hpp
 
     include/tkev3.h
     include/Nickable.h
@@ -85,7 +88,7 @@ add_executable(${PROJECT_NAME}
     include/Camera.h
     include/Manager.h
     include/Scene.h
-    include/scenes/Test.h
+    include/scenes/TestScene.hpp
     include/EzInputSys.h
-    include/components/Sprite.h include/SpriteSheet.h src/SpriteSheet.cpp src/Camera.cpp)
+    include/components/Sprite.hpp include/SpriteSheet.h src/SpriteSheet.cpp src/Camera.cpp)
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${STEAMWORKS_LIBRARIES} SMOG)

@@ -65,11 +65,9 @@ FVec2 InputSystem::getAnalogActionValue(AnalogAction action) {
 bool InputSystem::getDigitalActionValue(DigitalAction action) {
     SMOG_DigitalActionHandle h = digitalActionHandles[(size_t)action];
     if (h && activeSmogControllerHandle) {
-        printf("returning state\n");
         SMOG_DigitalActionData data = SMOG_GetDigitalActionData(activeSmogControllerHandle, h);
         return data.bState;
     } else {
-        printf("h = %llu, ascm = %llu\n", h, activeSmogControllerHandle);
         return false;
     }
 }

@@ -10,21 +10,41 @@
 #include <type_traits>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>
-#include <GL/glew.h>
+//#include <GL/glew.h>
 
 #define DEBUG_LINECHECK SDL_Log("%s line %d", __FILE_NAME__, __LINE__);
+
+#define USE_STEAM
 
 #ifndef PI
 #define PI 3.14159265358979323846
 #endif // PI
 
+// The return value of this function may be a nullptr- don't dereference without validating.
+#define RETURN_MAY_BE_NULL
+// nullptr is a legal argument for this parameter/argument
+#define ARGUMENT_MAY_BE_NULL
+
 namespace Alib {
     template<typename T, typename... TAs>
     using Function = T (*)(TAs...);
-    using Callback = void (*)(void);
+    using Callback = void (*)();
 }
 
-typedef struct FVec2 {
+template <typename E, typename T>
+class EnumArray {
+public:
+    explicit EnumArray(const size_t enumSize) { array = new T[enumSize](); }
+    ~EnumArray() { delete array; }
+    T& operator[](E index) { return array[(size_t)index]; }
+protected:
+    T* array = nullptr;
+    const size_t length = 1;
+};
+
+typedef class FVec2 {
+public:
+    FVec2() = default;
     FVec2(float px, float py) : x(px), y(py) {};
     float x = 0.0, y = 0.0;
 } FVec2;
@@ -60,20 +80,31 @@ typedef union SizeVec2 {
     struct { size_t w, h; };
 } SizeVec2;
 
-typedef struct Transform {
-    FVec2 pos;
-    FVec2 scale;
-    float rot;
+typedef class Transform {
+public:
+    Transform() = default;
+    explicit Transform(FVec2 p = { 0, 0 }, FVec2 s = { 1, 1 }, float r = 0) : pos(p), scale(s), rot(r) { }
+    FVec2 pos = { 0, 0 };
+    FVec2 scale = { 1, 1 };
+    // rot is in RADIANS 99% of the time!
+    float rot = 0;
+    Transform operator+(Transform t) const {
+        return Transform{
+            { pos.x     + t.pos.x   , pos.y     + t.pos.y   },
+            { scale.x   + t.scale.x , scale.y   + t.scale.y },
+            rot + t.rot
+        };
+    }
 } Transform;
 
-enum class Filter {
-    FILTER_NEAREST = GL_NEAREST,
-    FILTER_LINEAR = GL_LINEAR,
-    FILTER_NEAREST_MIP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
-    FILTER_LINEAR_MIP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
-    FILTER_NEAREST_MIP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
-    FILTER_LINEAR_MIP_LINEAR = GL_LINEAR_MIPMAP_LINEAR,
-};
+//enum class Filter {
+//    FILTER_NEAREST = GL_NEAREST,
+//    FILTER_LINEAR = GL_LINEAR,
+//    FILTER_NEAREST_MIP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
+//    FILTER_LINEAR_MIP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
+//    FILTER_NEAREST_MIP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
+//    FILTER_LINEAR_MIP_LINEAR = GL_LINEAR_MIPMAP_LINEAR,
+//};
 
 template <typename T>
 constexpr bool is_lvalue(T&) { return true; }

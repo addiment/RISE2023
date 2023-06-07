@@ -5,23 +5,18 @@
 
 #include "aces.h"
 #include "misc.h"
-#include "Manager.h"
 
-class Camera : public Component {
+class Camera : public Component, public Primitive {
 public:
     // flip is value of SDL_RendererFlip
-    void draw(SDL_Texture* texture, SDL_FRect srcrect, Transform transform, SDL_RendererFlip flip = SDL_FLIP_NONE);
+    void draw(SDL_Texture* texture, const SDL_Rect* srcrect, Transform t, SDL_RendererFlip flip = SDL_FLIP_NONE) const;
     using Component::Component;
-    float sceneSize = 1.0;
-    FVec2 pos = { 0, 0 };
-    float rot = 0;
 };
 
 class CameraActor : public Actor {
 public:
-    CameraActor() {
-        getChildren().push_back(new Camera((Actor*)this));
-    }
+    Camera* camera = new Camera((Actor*)this);
+    CameraActor() { }
 };
 
 #endif //TOOLKITENGINEV3_CAMERA_H

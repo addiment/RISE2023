@@ -10,20 +10,16 @@ SDL_Window* Manager::window = nullptr;
 // SDL_GLContext context;
 SDL_Renderer* Manager::renderer = nullptr;
 Scene* Manager::currentScene = nullptr;
-
-[[nodiscard]] Scene *Manager::getScene() { return currentScene; }
+Scene* scheduledSceneChange = nullptr;
 
 void Manager::changeScene(Scene* scene) {
-    if (currentScene) {
-        // TODO: cleanup current scene
-        delete currentScene;
-    }
-    currentScene = scene;
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "MANAGER Changing to scene (%s)", (scene->getSceneName() ? scene->getSceneName() : "unnamed"));
+    scheduledSceneChange = scene;
 }
 
-int Manager::play(int argc, char* argv[], Scene* scene) {
+int Manager::play(int argc, char* argv[], Scene* initialScene) {
 
-#ifdef NDEBUG
+#ifdef CMAKE_BUILD_DEBUG
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
 #endif
 
@@ -33,9 +29,20 @@ int Manager::play(int argc, char* argv[], Scene* scene) {
     }
 
     // SET THE INITIAL SCENE
-    changeScene(scene);
+    changeScene(initialScene);
 
-    while (isRunning) tick();
+    while (isRunning) {
+        if (scheduledSceneChange) {
+            if (currentScene) {
+                // TODO: cleanup current scene
+                delete currentScene;
+            }
+            currentScene = scheduledSceneChange;
+            scheduledSceneChange = nullptr;
+            currentScene->onPlay();
+        }
+        tick();
+    }
 
     Manager::shutdown();
 
@@ -94,7 +101,7 @@ int Manager::init() {
 
     SDL_Log("initialized");
 
-    InputSystem()->init();
+    InputSystem::init();
 
     return 0;
 }
@@ -142,20 +149,37 @@ void Manager::tick() {
     SteamAPI_RunCallbacks();
 #endif // USE_STEAM
 
-    InputSystem()->update();
+    InputSystem::update();
+    InputSystem::ActionSet actionSet = InputSystem::getCurrentActionSet();
+    if (currentScene->activePawn) {
+        for (size_t i = 0; i < (size_t)InputSystem::DigitalAction::NumActions; i++) {
+            currentScene->activePawn->sendInput(actionSet, (InputSystem::DigitalAction)i, InputSystem::getDigitalActionValue((InputSystem::DigitalAction)i));
+        }
+        for (size_t i = 0; i < (size_t)InputSystem::AnalogAction::NumActions; i++) {
+            currentScene->activePawn->sendInput(actionSet, (InputSystem::AnalogAction)i, InputSystem::getAnalogActionValue((InputSystem::AnalogAction)i));
+        }
+    }
+
+    // Current Scene
+    currentScene->update(delta);
 
     // Actors
     {
         {
-            for (auto & actor : currentScene->actors) {
-                actor.second->update(delta);
+            for (auto & it : currentScene->actors) {
+                if (!it.second->hasRunPlay) {
+                    // onPlay is on the same frame as update and render
+                    it.second->onPlay();
+                    it.second->hasRunPlay = true;
+                }
+                it.second->update(delta);
             }
         }
         // cleanup
         {
             queue<Actor*> markeds{};
-            for (auto & actor : currentScene->actors)
-                if (actor.second->isMarkedForDeath()) markeds.push(actor.second);
+            for (auto & it : currentScene->actors)
+                if (it.second->isMarkedForDeath()) markeds.push(it.second);
 
             using ID = Actor::ID;
             while (!markeds.empty()) {
@@ -185,8 +209,8 @@ void Manager::tick() {
     }
 
     SDL_RenderPresent(renderer);
-#ifdef NDEBUG
-    GLenum err = glGetError();
-    if (err != 0) SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "%x %s", err, glewGetErrorString(err));
-#endif
+//#ifdef CMAKE_BUILD_DEBUG
+//    GLenum err = glGetError();
+//    if (err != 0) SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "%x %s", err, glewGetErrorString(err));
+//#endif
 }
