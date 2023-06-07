@@ -1,5 +1,5 @@
 #include "aces.h"
-#include "Scene.h"
+#include "Manager.h"
 
 using namespace std;
 
@@ -26,8 +26,8 @@ Entity *Entity::getParent() {
     return parent;
 }
 
-Actor::Actor() : id((Scene::getScene() ? Scene::getScene()->reserveId() : 0)) {
-    Scene::getScene()->actors[id] = this;
+Actor::Actor() : id((Manager::getScene() ? Manager::getScene()->reserveId() : 0)) {
+    Manager::getScene()->actors[id] = this;
 }
 
 Actor::~Actor() {

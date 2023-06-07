@@ -59,6 +59,8 @@ endif()
 
 include_directories(${STEAMWORKS_INCLUDE_DIRS})
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+
 add_library(${PROJECT_NAME} STATIC smog.cpp)
 
 # END STEAMWORKS STUFF

@@ -14,6 +14,10 @@
 
 #define DEBUG_LINECHECK SDL_Log("%s line %d", __FILE_NAME__, __LINE__);
 
+#ifndef PI
+#define PI 3.14159265358979323846
+#endif // PI
+
 namespace Alib {
     template<typename T, typename... TAs>
     using Function = T (*)(TAs...);

@@ -9,6 +9,17 @@ bool Manager::isRunning = true;
 SDL_Window* Manager::window = nullptr;
 // SDL_GLContext context;
 SDL_Renderer* Manager::renderer = nullptr;
+Scene* Manager::currentScene = nullptr;
+
+[[nodiscard]] Scene *Manager::getScene() { return currentScene; }
+
+void Manager::changeScene(Scene* scene) {
+    if (currentScene) {
+        // TODO: cleanup current scene
+        delete currentScene;
+    }
+    currentScene = scene;
+}
 
 int Manager::play(int argc, char* argv[], Scene* scene) {
 
@@ -22,7 +33,7 @@ int Manager::play(int argc, char* argv[], Scene* scene) {
     }
 
     // SET THE INITIAL SCENE
-    Scene::changeScene(scene);
+    changeScene(scene);
 
     while (isRunning) tick();
 
@@ -136,28 +147,28 @@ void Manager::tick() {
     // Actors
     {
         {
-            for (auto & actor : Scene::getScene()->actors) {
+            for (auto & actor : currentScene->actors) {
                 actor.second->update(delta);
             }
         }
         // cleanup
         {
             queue<Actor*> markeds{};
-            for (auto & actor : Scene::getScene()->actors)
+            for (auto & actor : currentScene->actors)
                 if (actor.second->isMarkedForDeath()) markeds.push(actor.second);
 
             using ID = Actor::ID;
             while (!markeds.empty()) {
                 Actor *e = markeds.front();
                 ID aid = e->id;
-                Scene::getScene()->actors.erase(aid);
-                ID m = Scene::getScene()->actors.rbegin()->first;
+                currentScene->actors.erase(aid);
+                ID m = currentScene->actors.rbegin()->first;
                 if (m < aid) {
                     // at the end of the map, not fragmented
                     // retroactively clean up fragments (this is why fragments is a deque, not a queue)
-                    while (m < Scene::getScene()->fragments.back()) Scene::getScene()->fragments.pop_back();
+                    while (m < currentScene->fragments.back()) currentScene->fragments.pop_back();
                 } else {
-                    Scene::getScene()->fragments.push_back(aid);
+                    currentScene->fragments.push_back(aid);
                 }
                 delete e;
                 markeds.pop();
@@ -169,7 +180,7 @@ void Manager::tick() {
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-    for (auto & actor : Scene::getScene()->actors) {
+    for (auto & actor : currentScene->actors) {
         actor.second->render();
     }
 

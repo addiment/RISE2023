@@ -18,8 +18,11 @@ public:
     static SDL_Renderer* renderer;
 
     static int play(int argc, char* argv[], Scene* scene);
+    [[nodiscard]] static Scene *getScene();
+    static void changeScene(Scene *scene);
 private:
     Manager() = default;
+    static Scene *currentScene;
     static int init();
     static void shutdown();
     static void tick();

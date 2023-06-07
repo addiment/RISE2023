@@ -9,7 +9,8 @@
 
 class Camera : public Component {
 public:
-    void draw(SDL_Texture* texture, Transform transform);
+    // flip is value of SDL_RendererFlip
+    void draw(SDL_Texture* texture, SDL_FRect srcrect, Transform transform, SDL_RendererFlip flip = SDL_FLIP_NONE);
     using Component::Component;
     float sceneSize = 1.0;
     FVec2 pos = { 0, 0 };

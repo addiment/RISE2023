@@ -10,17 +10,13 @@
 
 class Scene {
 public:
-    [[nodiscard]] static Scene *getScene();
 
     virtual void update(double delta) = 0;
     virtual void onPlay() = 0;
 
-    // returns the scene changed to
-    static Scene *changeScene(Scene* scene);
     virtual ~Scene() = default;
-private:
-    static Scene *currentScene;
 
+private:
     friend class Actor;
     friend class Manager;
     std::map<Actor::ID, Actor*> actors{};
