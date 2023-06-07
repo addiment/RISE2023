@@ -6,7 +6,7 @@
 #include "aces.h"
 #include "misc.h"
 
-class Camera : public Component, public Primitive {
+class Camera : public Component {
 public:
     // flip is value of SDL_RendererFlip
     void draw(SDL_Texture* texture, const SDL_Rect* srcrect, Transform t, SDL_RendererFlip flip = SDL_FLIP_NONE) const;

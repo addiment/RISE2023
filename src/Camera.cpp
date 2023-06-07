@@ -26,5 +26,6 @@ void Camera::draw(SDL_Texture *texture, const SDL_Rect* srcrect, Transform t, SD
     const SDL_FPoint center = { 0, 0 };
     // TODO: fix this
     const SDL_Rect srect = { srcrect->x, srcrect->y, srcrect->w, srcrect->h };
+    printf("\n(RELATIVE) x = %f, y = %f\n(ABSOLUTE) x = %f, y = %f\n\n", t.pos.x, t.pos.y, rect.x, rect.y);
     SDL_RenderCopyExF(Manager::renderer, texture, &srect, &rect, t.rot - privTrans.rot, &center, (SDL_RendererFlip)flip);
 }

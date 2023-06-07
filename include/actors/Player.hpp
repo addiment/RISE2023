@@ -6,7 +6,7 @@
 #include "SpriteSheet.h"
 #include "components/Sprite.hpp"
 
-class Player : public Pawn, public Primitive {
+class Player : public Pawn {
 public:
 
     void onPlay() override {
@@ -31,40 +31,18 @@ public:
 
     void update(double delta) override {
         Pawn::update(delta);
-        Transform gr = getRelativeTransform();
+        if (InputSystem::getCurrentActionSet() == InputSystem::ActionSet::GameControls) {
+            FVec2 analogControlsValue = InputSystem::getAnalogActionValue(InputSystem::AnalogAction::AnalogControls);
+            getRelativeTransform().pos.x += analogControlsValue.x * (float)delta * 8.f;
+            getRelativeTransform().pos.y += analogControlsValue.y * (float)delta * 8.f;
+        }
+//        Transform gr = getRelativeTransform();
 //        SDL_Log("Player UPDATED");
     }
 
     void render() override {
         Pawn::render();
 //        SDL_Log("Player RENDERED");
-    }
-
-    bool sendInput(InputSystem::ActionSet set, InputSystem::AnalogAction analogAction, FVec2 analogActionData) override {
-        switch (set) {
-
-            case InputSystem::ActionSet::GameControls: {
-                switch (analogAction) {
-
-                    case InputSystem::AnalogAction::AnalogControls: {
-                        getRelativeTransform().pos.x += analogActionData.x;
-                        getRelativeTransform().pos.y += analogActionData.y;
-                        break;
-                    }
-
-                    default: break;
-                }
-                return true;
-            }
-
-            case InputSystem::ActionSet::MenuControls:
-            default: break;
-        }
-        return false;
-    }
-
-    bool sendInput(InputSystem::ActionSet set, InputSystem::DigitalAction digitalAction, bool digitalActionData) override {
-        return Pawn::sendInput(set, digitalAction, digitalActionData);
     }
 };
 

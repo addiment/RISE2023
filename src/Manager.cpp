@@ -143,22 +143,22 @@ void Manager::tick() {
         }
     }
 
-    double delta = 1.0;
+    double delta = 0.01666666666666666666666666666;
 
 #ifdef USE_STEAM
     SteamAPI_RunCallbacks();
 #endif // USE_STEAM
 
     InputSystem::update();
-    InputSystem::ActionSet actionSet = InputSystem::getCurrentActionSet();
-    if (currentScene->activePawn) {
-        for (size_t i = 0; i < (size_t)InputSystem::DigitalAction::NumActions; i++) {
-            currentScene->activePawn->sendInput(actionSet, (InputSystem::DigitalAction)i, InputSystem::getDigitalActionValue((InputSystem::DigitalAction)i));
-        }
-        for (size_t i = 0; i < (size_t)InputSystem::AnalogAction::NumActions; i++) {
-            currentScene->activePawn->sendInput(actionSet, (InputSystem::AnalogAction)i, InputSystem::getAnalogActionValue((InputSystem::AnalogAction)i));
-        }
-    }
+//    InputSystem::ActionSet actionSet = InputSystem::getCurrentActionSet();
+//    if (currentScene->activePawn) {
+//        for (size_t i = 0; i < (size_t)InputSystem::DigitalAction::NumActions; i++) {
+//            currentScene->activePawn->sendInput(actionSet, (InputSystem::DigitalAction)i, InputSystem::getDigitalActionValue((InputSystem::DigitalAction)i));
+//        }
+//        for (size_t i = 0; i < (size_t)InputSystem::AnalogAction::NumActions; i++) {
+//            currentScene->activePawn->sendInput(actionSet, (InputSystem::AnalogAction)i, InputSystem::getAnalogActionValue((InputSystem::AnalogAction)i));
+//        }
+//    }
 
     // Current Scene
     currentScene->update(delta);

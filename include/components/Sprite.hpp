@@ -4,14 +4,14 @@
 
 #include <tkev3.h>
 
-class Sprite : public Component, protected Primitive {
+class Sprite : public Component {
 public:
     using Component::Component;
 
     void update(double delta) override {
         Component::update(delta);
-        Entity* p = Component::getParent();
-        if (p) printf("%s\n", p->getPrintNickname());
+        Entity* p = getParent();
+//        if (p) printf("%s\n", p->getPrintNickname());
 //        auto children = Component::getChildren();
 //        printf("children:\n");
 //        for (auto & it : children) {
@@ -23,7 +23,6 @@ public:
         Component::render();
         Camera* cam = Manager::getActiveCamera();
         Transform ga = getAbsoluteTransform();
-//        printf("x = %f, y = %f\n", ga.pos.x, ga.pos.y);
         if (cam) cam->draw(texture, srcRect, ga);
     }
     [[nodiscard]] inline SDL_Texture *getTexture() const { return texture; }

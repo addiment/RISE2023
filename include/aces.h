@@ -37,24 +37,9 @@ public:
     explicit Entity(Entity* prnt) : parent(prnt) { prnt->getChildren().push_back(this); };
     explicit Entity(Component* prnt) : Entity((Entity*)prnt) { };
     explicit Entity(Actor* prnt) : Entity((Entity*)prnt) { };
-private:
-    friend class Manager;
-    std::vector<Entity*> children{};
-    Entity* parent = nullptr;
-    bool hasRunPlay = false;
-};
 
-class Component : public Entity {
-public:
-    using Entity::Entity;
-    explicit Component() = delete;
-    explicit Component(Entity* prnt) = delete;
-};
-
-class Primitive : Entity {
-public:
-    [[nodiscard]] inline Transform getAbsoluteTransform() const {
-        auto* pp = dynamic_cast<Primitive*>(getParent());
+    [[nodiscard]] inline Transform getAbsoluteTransform() const { // NOLINT(misc-no-recursion)
+        auto* pp = getParent();
         if (pp) {
             return transform + pp->getAbsoluteTransform();
         } else return transform;
@@ -62,7 +47,19 @@ public:
     [[nodiscard]] inline Transform& getRelativeTransform() { return transform; }
     void setRelativeTransform(Transform t) { transform = t; }
 private:
+    friend class Manager;
+    std::vector<Entity*> children{};
+    Entity* parent = nullptr;
+    bool hasRunPlay = false;
+
     Transform transform = Transform{ { 0, 0 }, { 1, 1 }, 0 };
+};
+
+class Component : public Entity {
+public:
+    using Entity::Entity;
+    explicit Component() = delete;
+    explicit Component(Entity* prnt) = delete;
 };
 
 class Actor : public Entity {
@@ -87,8 +84,8 @@ protected:
 class Pawn : public Actor {
 public:
     // returns whether the input was consumed.
-    virtual bool sendInput(InputSystem::ActionSet set, InputSystem::AnalogAction analogAction, FVec2 analogActionData) { return false; }
-    virtual bool sendInput(InputSystem::ActionSet set, InputSystem::DigitalAction digitalAction, bool digitalActionData) { return false; }
+//    virtual bool sendInput(InputSystem::ActionSet set, InputSystem::AnalogAction analogAction, FVec2 analogActionData) { return false; }
+//    virtual bool sendInput(InputSystem::ActionSet set, InputSystem::DigitalAction digitalAction, bool digitalActionData) { return false; }
 };
 
 #endif //TOOLKITENGINEV3_ACES_H
