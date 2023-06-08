@@ -1,6 +1,8 @@
 steamworks_sdk_*/*
 steamworks_sdk_*
 
+**/*.lnk
+
 ToolkitEditor/
 ToolkitEditor/**
 qt/
