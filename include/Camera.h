@@ -16,7 +16,7 @@ public:
 class CameraActor : public Actor {
 public:
     Camera* camera = new Camera((Actor*)this);
-    CameraActor() { }
+    CameraActor() = default;
 };
 
 #endif //TOOLKITENGINEV3_CAMERA_H

@@ -31,8 +31,8 @@
 // nullptr is a legal argument for this parameter/argument
 #define ARGUMENT_MAY_BE_NULL
 
-#define andeq(VALUE, MASK) ((VALUE & MASK) == MASK)
-#define nor(A, B) (!(A || B))
+#define andeq(VALUE, MASK) (((VALUE) & (MASK)) == (MASK))
+#define nor(A, B) (!((A) || (B)))
 
 namespace Alib {
     template<typename T, typename... TAs>
@@ -43,7 +43,7 @@ namespace Alib {
 template <typename E, typename T>
 class EnumArray {
 public:
-    explicit EnumArray(const size_t enumSize) { array = new T[enumSize](); }
+    explicit EnumArray(const size_t eSize) : length(eSize) { array = new T[eSize](); }
     ~EnumArray() { delete array; }
     T& operator[](E index) { return array[(size_t)index]; }
 protected:

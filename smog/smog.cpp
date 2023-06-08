@@ -1,5 +1,4 @@
 #include "smog.h"
-#include <steam/steam_api.h>
 #include <steam/isteaminput.h>
 
 #ifdef __cplusplus

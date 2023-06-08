@@ -13,7 +13,7 @@ SDL_Renderer* Manager::renderer = nullptr;
 Scene* Manager::currentScene = nullptr;
 Scene* scheduledSceneChange = nullptr;
 IVec2 windowSize = { 640, 640 };
-IVec2 lastWindowedSize = { 640, 640 };
+[[maybe_unused]] IVec2 lastWindowedSize = { 640, 640 };
 
 void Manager::changeScene(Scene* scene) {
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "MANAGER Changing to scene (%s)", (scene->getSceneName() ? scene->getSceneName() : "unnamed"));
@@ -182,7 +182,6 @@ void Manager::tick() {
             case SDL_QUIT: {
                 isRunning = false;
                 return;
-                break;
             }
             case SDL_KEYDOWN:
                 // key repeats are always inconsistent.

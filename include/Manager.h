@@ -31,7 +31,7 @@ public:
         else return currentScene->activeCamera;
     }
     // calls the function of the same name on the current scene
-    [[nodiscard]] RETURN_MAY_BE_NULL static inline Pawn* getActivePawn() {
+    [[maybe_unused]] [[nodiscard]] RETURN_MAY_BE_NULL static inline Pawn* getActivePawn() {
         if (!currentScene) return nullptr;
         else return currentScene->activePawn;
     }
