@@ -2,8 +2,9 @@
 #include "scenes/TestScene.hpp"
 using namespace std;
 
-// DEFINITITION
+// DEFINITION
 void EnginePostInit() {
+
     {
         SpriteSheet *sheet = &(SpriteSheet::sheets[SpriteSheet::WORLD]);
         if (!sheet->isLoaded) {
@@ -46,5 +47,5 @@ int main(int argc, char* argv[]) {
 #ifdef NDEBUG
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
 #endif
-    return Manager::play(argc, argv, new Scenes::TestScene());
+    return Manager::play(argc, argv, new Scenes::TestScene(), "Platformer");
 }

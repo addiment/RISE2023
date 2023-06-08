@@ -20,7 +20,7 @@ public:
     static SDL_Renderer* renderer;
 
     // engine entry point
-    static int play(int argc, char* argv[], Scene* initialScene);
+    static int play(int argc, char* argv[], Scene* initialScene, const char* windowName);
     // returns the current scene
     [[nodiscard]] static inline Scene *getScene() { return currentScene; }
     // changes the scene
@@ -35,12 +35,13 @@ public:
         if (!currentScene) return nullptr;
         else return currentScene->activePawn;
     }
+    static IVec2 getWindowSize();
 private:
     Manager() = default;
 
     static Scene *currentScene;
 
-    static int init();
+    static int init(const char* windowName);
     static void shutdown();
     static void tick();
 };

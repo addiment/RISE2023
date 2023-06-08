@@ -18,7 +18,7 @@ public:
         const SDL_Rect rect = sheet.getCell(0, 0);
         new Sprite(
             this,
-            getRelativeTransform(),
+            Transform{ { 0, 0 }, { 2, 2 }, 0 },
             sheet.texture,
             &rect
         );

@@ -2,6 +2,7 @@
 #ifndef RISE_EZINPUTSYS_H
 #define RISE_EZINPUTSYS_H
 
+#include <unordered_map>
 #include <unordered_set>
 #include <SDL2/SDL.h>
 #include "../smog/smog.h"

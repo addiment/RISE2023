@@ -25,6 +25,9 @@
 // nullptr is a legal argument for this parameter/argument
 #define ARGUMENT_MAY_BE_NULL
 
+#define andeq(VALUE, MASK) ((VALUE & MASK) == MASK)
+#define nor(A, B) (!(A || B))
+
 namespace Alib {
     template<typename T, typename... TAs>
     using Function = T (*)(TAs...);
@@ -91,7 +94,7 @@ public:
     Transform operator+(Transform t) const {
         return Transform{
             { pos.x     + t.pos.x   , pos.y     + t.pos.y   },
-            { scale.x   + t.scale.x , scale.y   + t.scale.y },
+            { scale.x   * t.scale.x , scale.y   * t.scale.y },
             rot + t.rot
         };
     }
