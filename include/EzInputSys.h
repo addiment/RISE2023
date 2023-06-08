@@ -12,6 +12,7 @@ class InputSystem {
 public:
     enum class DigitalAction : size_t {
         Jump,
+        Special,
         PauseMenu,
 
         MenuUp,

@@ -10,6 +10,8 @@
 #include <type_traits>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 //#include <GL/glew.h>
 
 #define DEBUG_LINECHECK SDL_Log("%s line %d", __FILE_NAME__, __LINE__);
@@ -19,6 +21,10 @@
 #ifndef PI
 #define PI 3.14159265358979323846
 #endif // PI
+
+// placeholder type, for when I just want to name stuff but don't have typedefs yet.
+#define placeholder_t void*
+#define placeholder_tc(COMMENT) void*
 
 // The return value of this function may be a nullptr- don't dereference without validating.
 #define RETURN_MAY_BE_NULL

@@ -15,6 +15,7 @@ void InputSystem::init() {
 
     // Digital actions
     digitalActionHandles[(size_t)InputSystem::DigitalAction::Jump           ] = SMOG_GetDigitalActionHandle("jump");
+    digitalActionHandles[(size_t)InputSystem::DigitalAction::Special        ] = SMOG_GetDigitalActionHandle("special");
 //    digitalActionHandles[(size_t)InputSystem::DigitalAction::PauseMenu      ] = SteamInput_GetDigitalActionHandle("pause_menu"); // WRONG
     digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuUp         ] = SMOG_GetDigitalActionHandle("menu_up");
     digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuDown       ] = SMOG_GetDigitalActionHandle("menu_down");

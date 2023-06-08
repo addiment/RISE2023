@@ -9,6 +9,16 @@
 class Player : public Pawn {
 public:
 
+    struct {
+        SoundSystem::Sound jump = SoundSystem::Sound{ SoundSystem::EFFECT, 1.0 };
+    } sounds;
+
+    // this could be a bit-field but idc
+    struct {
+        bool jump = false;
+        bool special = false;
+    } lastInputState;
+
     void onPlay() override {
         Pawn::onPlay();
         Pawn::setNickname("Player");
@@ -27,15 +37,36 @@ public:
 //        for (auto & it : children) {
 //            printf("%s\n", it->getPrintNickname());
 //        }
+        SoundSystem::armSound(&sounds.jump, "assets/jump_mixed.wav");
     }
+
+    void onJump() { SoundSystem::playSound(&sounds.jump); }
+
+    void onSpecial() { }
 
     void update(double delta) override {
         Pawn::update(delta);
         if (InputSystem::getCurrentActionSet() == InputSystem::ActionSet::GameControls) {
+            // analog input
             FVec2 analogControlsValue = InputSystem::getAnalogActionValue(InputSystem::AnalogAction::AnalogControls);
+            // TODO: this is really bad, need velocity and acceleration
             getRelativeTransform().pos.x += analogControlsValue.x * (float)delta * 8.f;
             getRelativeTransform().pos.y += analogControlsValue.y * (float)delta * 8.f;
+
+            // Update digital input states
+            {
+                bool cjump = InputSystem::getDigitalActionValue(InputSystem::DigitalAction::Jump);
+                if (lastInputState.jump != cjump && cjump) onJump();
+                lastInputState.jump = cjump;
+            }
+            {
+                bool cspecial = InputSystem::getDigitalActionValue(InputSystem::DigitalAction::Special);
+                if (lastInputState.special != cspecial && cspecial) onSpecial();
+                lastInputState.special = cspecial;
+            }
+
         }
+
 //        Transform gr = getRelativeTransform();
 //        SDL_Log("Player UPDATED");
     }

@@ -10,7 +10,7 @@ public:
 
     void update(double delta) override {
         Component::update(delta);
-        Entity* p = getParent();
+//        Entity* p = getParent();
 //        if (p) printf("%s\n", p->getPrintNickname());
 //        auto children = Component::getChildren();
 //        printf("children:\n");

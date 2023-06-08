@@ -16,6 +16,7 @@
 			"Button"
 			{
 				"jump"	"#Action_Jump"
+				"special"	"#Action_Special"
 			}
 		}
 		"MenuControls"
@@ -23,12 +24,12 @@
 			"title"					"#Set_MenuControls"
 			"Button"
 			{
+                "menu_select"	"#Action_MenuSelect"
+                "menu_cancel"	"#Action_MenuCancel"
 				"menu_up"		"#Action_MenuUp"
 				"menu_down"		"#Action_MenuDown"
 				"menu_left"		"#Action_MenuLeft"
 				"menu_right"	"#Action_MenuRight"
-				"menu_select"	"#Action_MenuSelect"
-				"menu_cancel"	"#Action_MenuCancel"
 			}
 		}
 	}
@@ -45,13 +46,14 @@
 			"Action_AnalogControls" 	"Analog Controls"
 
 			"Action_Jump"				"Jump"
+			"Action_Special"			"Use Special"
 
+			"Action_MenuSelect"			"Menu Select"
+			"Action_MenuCancel"			"Menu Cancel"
 			"Action_MenuUp"				"Menu Up"
 			"Action_MenuDown"			"Menu Down"
 			"Action_MenuLeft"			"Menu Left"
 			"Action_MenuRight"			"Menu Right"
-			"Action_MenuSelect"			"Menu Select"
-			"Action_MenuCancel"			"Menu Cancel"
 		}
 	}
 }

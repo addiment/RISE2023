@@ -10,6 +10,7 @@
 #include "Nickable.h"
 #include "aces.h"
 #include "EzInputSys.h"
+#include "EzSoundSys.h"
 #include "Camera.h"
 
 int init();

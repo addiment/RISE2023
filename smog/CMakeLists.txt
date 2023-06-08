@@ -15,7 +15,7 @@ endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
 
-set(STEAMWORKS_ROOT "${PROJECT_SOURCE_DIR}/steamworks_sdk_${STEAMWORKS_VERSION}/sdk")
+set(STEAMWORKS_ROOT "${PROJECT_SOURCE_DIR}/../steamworks_sdk_${STEAMWORKS_VERSION}/sdk")
 
 find_package(Steamworks REQUIRED)
 

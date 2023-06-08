@@ -1,6 +1,7 @@
 #include <steam/steam_api.h>
 #include "Manager.h"
 #include "EzInputSys.h"
+#include "EzSoundSys.h"
 #include <queue>
 
 using namespace std;
@@ -98,11 +99,23 @@ int Manager::init(const char* windowName) {
         int flags = IMG_INIT_PNG;
         int res = IMG_Init(flags);
         if (res != flags) {
-            SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL_image: %s", SDL_GetError());
+            SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL_image: %s", IMG_GetError());
             return (res ? res : 1);
         }
     }
 #pragma endregion SDL2_image Init
+
+#pragma region SDL2_mixer Init
+    // Init SDL2_image
+    {
+        int flags = MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG | MIX_INIT_OPUS;
+        int res = Mix_Init(flags);
+        if (res != flags) {
+            SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL_mixer: %s", Mix_GetError());
+            return (res ? res : 1);
+        }
+    }
+#pragma endregion SDL2_mixer Init
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
@@ -128,6 +141,11 @@ int Manager::init(const char* windowName) {
 
     // Init input system
     InputSystem::init();
+
+    {
+        int res = SoundSystem::init();
+        if (res) return res;
+    }
 
     return 0;
 }
