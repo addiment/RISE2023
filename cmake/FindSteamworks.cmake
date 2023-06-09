@@ -1,5 +1,5 @@
 if(NOT DEFINED BUILD_ARCH)
-    set(BUILD_ARCH "x86")
+    set(BUILD_ARCH "x64")
 endif()
 
 if(NOT DEFINED STEAMWORKS_VERSION)

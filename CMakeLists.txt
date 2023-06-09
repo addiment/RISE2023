@@ -17,19 +17,20 @@ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
 
 include(FindPkgConfig)
 
-pkg_search_module(SDL2 REQUIRED)
+find_package(SDL2 REQUIRED)
 pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image>=2.0.0)
 pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer>=2.0.0)
 find_package(Steamworks REQUIRED)
 
-add_compile_options(-Wall -O2)
-add_link_options(-O2) # add flto if lld
+add_compile_options(-Wall -O2 -mconsole -Wall)
+add_link_options(-O2 -mconsole) # add flto if lld
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DCMAKE_BUILD_DEBUG") # some #ifdef directives in the code use CMAKE_BUILD_DEBUG
-
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DCMAKE_BUILD_RELEASE") # some #ifdef directives in the code use CMAKE_BUILD_DEBUG
 
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${STEAMWORKS_INCLUDE_DIRS})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mconsole -Wall")
-# -O2
+
+set_source_files_properties(res/toolkit.rc PROPERTIES CMAKE_CONFIGURE_DEPENDS res/icon.ico )
+
 add_executable(${PROJECT_NAME}
     res/toolkit.rc
 
