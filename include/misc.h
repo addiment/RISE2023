@@ -34,10 +34,10 @@
 #define andeq(VALUE, MASK) (((VALUE) & (MASK)) == (MASK))
 #define nor(A, B) (!((A) || (B)))
 
-namespace Alib {
+namespace aLib {
     template<typename T, typename... TAs>
     using Function = T (*)(TAs...);
-    using Callback = void (*)();
+    using Callback = Function<void>;
 }
 
 template <typename E, typename T>

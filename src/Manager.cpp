@@ -2,6 +2,7 @@
 #include "Manager.h"
 #include "EzInputSys.h"
 #include "EzSoundSys.h"
+#include "misc.h"
 #include <queue>
 
 using namespace std;
@@ -30,7 +31,7 @@ void onWindowResized(int nw, int nh) {
     if (!isFullscreen()) lastWindowedSize = windowSize;
 }
 
-int Manager::play(int argc, char* argv[], Scene* initialScene, const char* windowName) {
+int Manager::play(int argc, char* argv[], SceneFactory initialSceneFactory, const char* windowName) {
 
 #ifdef CMAKE_BUILD_DEBUG
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
@@ -45,12 +46,14 @@ int Manager::play(int argc, char* argv[], Scene* initialScene, const char* windo
     EnginePostInit();
 
     // SET THE INITIAL SCENE
-    changeScene(initialScene);
+    changeScene(initialSceneFactory());
 
     while (isRunning) {
         if (scheduledSceneChange) {
             if (currentScene) { // NOLINT(readability-delete-null-pointer) because we will actually do other stuff later
                 // TODO: cleanup current scene
+                // Stop all audio
+//                SoundSystem::flush();
                 delete currentScene;
             }
             currentScene = scheduledSceneChange;
@@ -155,15 +158,20 @@ void Manager::shutdown() {
 
     // TODO: run cleanup code
 
+    IMG_Quit();
+    Mix_Quit();
     SDL_Quit();
 
 #ifdef USE_STEAM
     SteamAPI_Shutdown();
 #endif // USE_STEAM
+
     SDL_Log("goodnight");
 }
 
 void Manager::tick() {
+
+#pragma region SDL_PollEvent
     SDL_Event ev;
     while (SDL_PollEvent(&ev)) {
         switch (ev.type) {
@@ -198,7 +206,9 @@ void Manager::tick() {
             }
         }
     }
+#pragma endregion SDL_PollEvent
 
+    // TODO: delta can't be a constant- measure render time!
     double delta = 0.01666666666666666666666666666;
 
 #ifdef USE_STEAM
@@ -206,21 +216,13 @@ void Manager::tick() {
 #endif // USE_STEAM
 
     InputSystem::update();
-//    InputSystem::ActionSet actionSet = InputSystem::getCurrentActionSet();
-//    if (currentScene->activePawn) {
-//        for (size_t i = 0; i < (size_t)InputSystem::DigitalAction::NumActions; i++) {
-//            currentScene->activePawn->sendInput(actionSet, (InputSystem::DigitalAction)i, InputSystem::getDigitalActionValue((InputSystem::DigitalAction)i));
-//        }
-//        for (size_t i = 0; i < (size_t)InputSystem::AnalogAction::NumActions; i++) {
-//            currentScene->activePawn->sendInput(actionSet, (InputSystem::AnalogAction)i, InputSystem::getAnalogActionValue((InputSystem::AnalogAction)i));
-//        }
-//    }
 
     // Current Scene
     currentScene->update(delta);
 
     // Actors
     {
+        // run onPlay() and update()
         {
             for (auto & it : currentScene->actors) {
                 if (!it.second->hasRunPlay) {
@@ -260,9 +262,8 @@ void Manager::tick() {
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-    for (auto & actor : currentScene->actors) {
-        actor.second->render();
-    }
+    // render all actors
+    for (auto & actor : currentScene->actors) actor.second->render();
 
     SDL_RenderPresent(renderer);
 //#ifdef CMAKE_BUILD_DEBUG
@@ -272,5 +273,5 @@ void Manager::tick() {
 }
 
 IVec2 Manager::getWindowSize() {
-    return IVec2();
+    return windowSize;
 }

@@ -10,7 +10,7 @@ class Player : public Pawn {
 public:
 
     struct {
-        SoundSystem::Sound jump = SoundSystem::Sound{ SoundSystem::EFFECT, 1.0 };
+        SoundSystem::Sound jump = SoundSystem::Sound{ SoundSystem::EFFECT, 96 };
     } sounds;
 
     // this could be a bit-field but idc
@@ -37,7 +37,7 @@ public:
 //        for (auto & it : children) {
 //            printf("%s\n", it->getPrintNickname());
 //        }
-        SoundSystem::armSound(&sounds.jump, "assets/jump_mixed.wav");
+        SoundSystem::armSound(&sounds.jump, "assets/jump.wav");
     }
 
     void onJump() { SoundSystem::playSound(&sounds.jump); }

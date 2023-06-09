@@ -12,6 +12,8 @@ class Camera;
 // DEFINE THIS IN YOUR MAIN.CPP
 void EnginePostInit();
 
+using SceneFactory = aLib::Function<Scene*>;
+
 class Manager {
 public:
     static bool isRunning;
@@ -20,7 +22,9 @@ public:
     static SDL_Renderer* renderer;
 
     // engine entry point
-    static int play(int argc, char* argv[], Scene* initialScene, const char* windowName);
+    // Internally, it calls init, shutdown, and tick.
+    // It's also in charge of handling scene transitions (NOT in the changeScene or tick functions!)
+    static int play(int argc, char* argv[], SceneFactory initialSceneFactory, const char* windowName);
     // returns the current scene
     [[nodiscard]] static inline Scene *getScene() { return currentScene; }
     // changes the scene
@@ -41,8 +45,11 @@ private:
 
     static Scene *currentScene;
 
+    // Initializes all engine subsystems (i.e. SDL, Steam)
     static int init(const char* windowName);
+    // Cleans up resources (mostly...)
     static void shutdown();
+    // Runs every frame. Handles updating and rendering actors.
     static void tick();
 };
 

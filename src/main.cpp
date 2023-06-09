@@ -42,10 +42,12 @@ void EnginePostInit() {
     }
 }
 
+Scene* InitialSceneFactory() { return new Scenes::TestScene(); }
+
 int main(int argc, char* argv[]) {
     SDL_Log("running");
 #ifdef NDEBUG
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
 #endif
-    return Manager::play(argc, argv, new Scenes::TestScene(), "Platformer");
+    return Manager::play(argc, argv, InitialSceneFactory, "Platformer");
 }
