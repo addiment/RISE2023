@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <SDL2/SDL.h>
-#include "../smog/smog.h"
 #include "misc.h"
 
 class InputSystem {
