@@ -32,8 +32,8 @@ All Kenney assets used are in the public domain (CC0 1.0). View the license here
 
 *Salty Ditty* by Kevin MacLeod <br>
 **Free download:** [filmmusic.io/song/4315-salty-ditty](https://filmmusic.io/song/4315-salty-ditty) <br>
-**License (CC BY 4.0):** [filmmusic.io/standard-license](https://creativecommons.org/licenses/by/4.0/) <br>
+**License (CC BY 4.0):** [creativecommons.org/licenses/by/4.0/](https://creativecommons.org/licenses/by/4.0/) <br>
 
 *Chiptune Game Intro 01* by TaigaSoundProd <br>
 **Free download:** [filmmusic.io/song/10461-chiptune-game-intro-01](https://filmmusic.io/song/10461-chiptune-game-intro-01) <br>
-**License (CC BY 4.0):** [filmmusic.io/standard-license](https://creativecommons.org/licenses/by/4.0/) <br>
+**License (CC BY 4.0):** [creativecommons.org/licenses/by/4.0/](https://creativecommons.org/licenses/by/4.0/) <br>

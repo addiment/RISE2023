@@ -1,3 +1,5 @@
+build/*
+out/*
 steamworks_sdk_*/*
 steamworks_sdk_*
 
