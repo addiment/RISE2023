@@ -3,7 +3,8 @@
 # Notes
 
 This project was developed on Windows 10 using MSYS2 (MinGW64).
-I tried as much as possible (without explicit effort) to make it work on Linux, but am unsure whether it'll work completely.
+I tried as much as possible to make it work on Linux, but am unsure whether it'll work completely.
+I tested it on Debian 11, and it worked for me, though your mileage may vary.
 
 - SDL2 and its image/mixer libraries are available under the [zlib license](https://www.libsdl.org/license.php).
 - The Steamworks SDK is available under the Steamworks [SDK Access Agreement](https://partner.steamgames.com/documentation/sdk_access_agreement).

@@ -62,14 +62,14 @@ int SoundSystem::init() {
 //        SDL_Log("%s", dn);
 //    }
 
-    char* dname = nullptr;
-    {
-        SDL_AudioSpec spec{};
-        int res = SDL_GetDefaultAudioInfo(&dname, &spec, false);
-        if (res || !dname) return res;
-        SDL_Log("DEFAULT SOUND DEVICE: %s", dname);
-    }
-
+//    char* dname = nullptr;
+//    {
+//        SDL_AudioSpec spec{};
+//        int res = SDL_GetDefaultAudioInfo(&dname, &spec, false);
+//        if (res || !dname) return res;
+//        SDL_Log("DEFAULT SOUND DEVICE: %s", dname);
+//    }
+//
 //    int res = Mix_OpenAudioDevice(audioFrequency, audioFormat, audioChannels, audioChunkSize, dname, 0);
     int res = Mix_OpenAudio(audioFrequency, audioFormat, audioChannels, audioChunkSize);
     if (res < 0) {
