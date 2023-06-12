@@ -38,6 +38,12 @@ namespace aLib {
     template<typename T, typename... TAs>
     using Function = T (*)(TAs...);
     using Callback = Function<void>;
+
+    template <typename T>
+    inline T max(T a, T b) { return ((a > b) ? a : b); }
+    template <typename T>
+    inline T min(T a, T b) { return ((a < b) ? a : b); }
+
 }
 
 template <typename E, typename T>

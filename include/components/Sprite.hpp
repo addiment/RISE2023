@@ -27,9 +27,11 @@ public:
     }
     [[nodiscard]] inline SDL_Texture *getTexture() const { return texture; }
     [[nodiscard]] inline const SDL_Rect *getSrcRect() const { return srcRect; }
+    [[nodiscard]] inline float getUnitsPerPixel() const { return unitsPerPixel; }
 
-    void setTexture(SDL_Texture *pTexture) { Sprite::texture = pTexture; }
-    inline void setSrcRect(const SDL_Rect* rect) {
+    void setUnitsPerPixel(float uPP) { Sprite::unitsPerPixel = uPP; }
+    void setTexture(SDL_Texture *tex) { Sprite::texture = tex; }
+    void setSrcRect(const SDL_Rect* rect) {
         if (rect) {
             *Sprite::srcRect = *rect;
             return;
@@ -50,6 +52,16 @@ public:
 protected:
     SDL_Texture* texture = nullptr;
     SDL_Rect* srcRect = nullptr;
+    float unitsPerPixel = 1.0;
+};
+
+class SpriteActor : public Actor {
+public:
+    Sprite* sprite = new Sprite((Actor*)this);
+    using Actor::Actor;
+    explicit SpriteActor(float uPP) : SpriteActor() {
+        sprite->setUnitsPerPixel(uPP);
+    }
 };
 
 #endif // RISE_SPRITE_HPP

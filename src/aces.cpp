@@ -22,7 +22,15 @@ vector<Entity *> & Entity::getChildren() { return children; }
 
 Entity *Entity::getParent() const { return parent; }
 
-void Entity::onPlay() { }
+void Entity::onPlay() {
+    if (!hasRunPlay) for (auto & it : children) it->onPlay();
+}
+
+Entity::Entity(Entity* prnt) : parent(prnt) {
+    if (!parent->canHaveChildren()) throw runtime_error("Tried to attach a new entity to an entity that can't have children!");
+    parent->getChildren().push_back(this);
+};
+
 
 Actor::Actor() : id((Manager::getScene() ? Manager::getScene()->reserveId() : 0)) {
     Manager::getScene()->actors[id] = this;

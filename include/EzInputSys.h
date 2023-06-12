@@ -39,6 +39,7 @@ public:
     static FVec2 getAnalogActionValue(AnalogAction action);
     static bool getDigitalActionValue(DigitalAction action);
     static void update();
+    static void sendAction();
 private:
     friend class Manager;
     InputSystem() = default;

@@ -57,5 +57,5 @@ add_executable(${PROJECT_NAME}
     include/Scene.h
     include/scenes/TestScene.hpp
     include/EzInputSys.h
-    include/components/Sprite.hpp include/SpriteSheet.h src/SpriteSheet.cpp src/Camera.cpp include/EzSoundSys.h src/EzSoundSys.cpp)
+    include/components/Sprite.hpp include/SpriteSheet.h src/SpriteSheet.cpp src/Camera.cpp include/EzSoundSys.h src/EzSoundSys.cpp include/components/UserInterface.h include/components/PlayerHUD.h)
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${STEAMWORKS_LIBRARIES})

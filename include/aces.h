@@ -24,8 +24,10 @@ class Component;
 
 class Entity : public Nickable {
 public:
-    std::vector<Entity *> & getChildren();
+    [[nodiscard]] std::vector<Entity *> & getChildren();
     [[nodiscard]] Entity* getParent() const;
+
+    [[nodiscard]] virtual const bool canHaveChildren() const { return true; }
 
     virtual void onPlay();
     virtual void update(double delta);
@@ -33,8 +35,7 @@ public:
 
     virtual ~Entity() = default;
 
-    explicit Entity() = default;
-    explicit Entity(Entity* prnt) : parent(prnt) { prnt->getChildren().push_back(this); };
+    explicit Entity(Entity* prnt);
     explicit Entity(Component* prnt) : Entity((Entity*)prnt) { };
     explicit Entity(Actor* prnt) : Entity((Entity*)prnt) { };
 
@@ -48,11 +49,15 @@ public:
     void setRelativeTransform(Transform t) { transform = t; }
 private:
     friend class Manager;
+    friend class Component;
+    friend class Actor;
+
     std::vector<Entity*> children{};
     Entity* parent = nullptr;
     bool hasRunPlay = false;
-
     Transform transform = Transform{ { 0, 0 }, { 1, 1 }, 0 };
+
+    explicit Entity() = default;
 };
 
 class Component : public Entity {
@@ -83,7 +88,8 @@ protected:
 
 class Pawn : public Actor {
 public:
-    // returns whether the input was consumed.
+    using Actor::Actor;
+// returns whether the input was consumed.
 //    virtual bool sendInput(InputSystem::ActionSet set, InputSystem::AnalogAction analogAction, FVec2 analogActionData) { return false; }
 //    virtual bool sendInput(InputSystem::ActionSet set, InputSystem::DigitalAction digitalAction, bool digitalActionData) { return false; }
 };

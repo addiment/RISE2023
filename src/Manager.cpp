@@ -16,6 +16,8 @@ Scene* scheduledSceneChange = nullptr;
 IVec2 windowSize = { 640, 640 };
 [[maybe_unused]] IVec2 lastWindowedSize = { 640, 640 };
 
+size_t gameTicksSinceSceneLoad = 0;
+
 void Manager::changeScene(Scene* scene) {
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "MANAGER Changing to scene (%s)", (scene->getSceneName() ? scene->getSceneName() : "unnamed"));
     scheduledSceneChange = scene;
@@ -56,6 +58,7 @@ int Manager::play(int argc, char* argv[], SceneFactory initialSceneFactory, cons
 //                SoundSystem::flush();
                 delete currentScene;
             }
+            gameTicksSinceSceneLoad = 0;
             currentScene = scheduledSceneChange;
             scheduledSceneChange = nullptr;
             currentScene->onPlay();
@@ -270,6 +273,7 @@ void Manager::tick() {
 //    GLenum err = glGetError();
 //    if (err != 0) SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "%x %s", err, glewGetErrorString(err));
 //#endif
+    gameTicksSinceSceneLoad++;
 }
 
 IVec2 Manager::getWindowSize() {

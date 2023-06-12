@@ -5,9 +5,13 @@
 #include <tkev3.h>
 #include "SpriteSheet.h"
 #include "components/Sprite.hpp"
+#include "components/PlayerHUD.h"
 
 class Player : public Pawn {
 public:
+
+    Sprite* sprite;
+    PlayerHUD* hud = new PlayerHUD((Actor*)this);
 
     struct {
         SoundSystem::Sound jump = SoundSystem::Sound{ SoundSystem::EFFECT, 96 };
@@ -19,6 +23,11 @@ public:
         bool special = false;
     } lastInputState;
 
+    ~Player() override {
+        Pawn::~Pawn();
+        delete hud;
+    }
+
     void onPlay() override {
         Pawn::onPlay();
         Pawn::setNickname("Player");
@@ -26,7 +35,7 @@ public:
         SDL_Log("Player PLAYED");
         SpriteSheet& sheet = SpriteSheet::sheets[SpriteSheet::CHARACTERS];
         const SDL_Rect rect = sheet.getCell(0, 0);
-        new Sprite(
+        sprite = new Sprite(
             this,
             Transform{ { 0, 0 }, { 2, 2 }, 0 },
             sheet.texture,
