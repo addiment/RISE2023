@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.18)
+# for the school computers lol
+set(CMAKE_C_COMPILER_WORKS 1)
+set(CMAKE_CXX_COMPILER_WORKS 1)
 project(RISE)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -13,12 +16,12 @@ set(STEAMWORKS_VERSION "157")
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
 
-include(FindPkgConfig)
+find_package(PkgConfig)
 
 find_package(SDL2 REQUIRED)
-pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image>=2.0.0)
-pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer>=2.0.0)
-pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf>=2.0.0)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_mixer REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 find_package(Steamworks REQUIRED)
 
 add_compile_options(-Wall -O2)
