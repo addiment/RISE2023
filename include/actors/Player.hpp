@@ -11,7 +11,6 @@ class Player : public Pawn {
 public:
 
     Sprite* sprite;
-    PlayerHUD* hud = new PlayerHUD((Actor*)this);
 
     struct {
         SoundSystem::Sound jump = SoundSystem::Sound{ SoundSystem::EFFECT, 96 };
@@ -32,7 +31,6 @@ public:
         Pawn::onPlay();
         Pawn::setNickname("Player");
         setRelativeTransform(Transform { { 32, 32 }, { 48, 48 }, 0 });
-        SDL_Log("Player PLAYED");
         SpriteSheet& sheet = SpriteSheet::sheets[SpriteSheet::CHARACTERS];
         const SDL_Rect rect = sheet.getCell(0, 0);
         sprite = new Sprite(

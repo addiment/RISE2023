@@ -22,7 +22,6 @@ public:
 
     void onPlay() override {
         UserInterface::onPlay();
-        printf("hud played\n");
         heartSrcRect[0] = worldSheet.getCell(4, 2);
         heartSrcRect[1] = worldSheet.getCell(5, 2);
         heartSrcRect[2] = worldSheet.getCell(6, 2);
@@ -34,7 +33,6 @@ public:
 
     void render() override {
         UserInterface::render();
-        printf("hud rendered\n");
         for (int i = 0; i < numHearts; i++) {
             const SDL_FRect dst = {
                 topLeft.x + heartScale * (float)(worldSheet.cellSize * i),

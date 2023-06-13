@@ -15,17 +15,17 @@ public:
     [[nodiscard]] inline float getPixelsPerUnit() const { return pixelsPerUnit; }
     void setPixelsPerUnit(float pPU) { Camera::pixelsPerUnit = pPU; }
 
-    Camera(Component* prnt, float pPU) :  Component(prnt), pixelsPerUnit(pPU) { }
-    Camera(Actor* prnt, float pPU) :  Component(prnt), pixelsPerUnit(pPU) { }
+    Camera(Component* prnt, float pPU, Transform trans = {}) : Component(prnt, trans), pixelsPerUnit(pPU) { }
+    Camera(Actor* prnt, float pPU, Transform trans = {}) :  Component(prnt, trans), pixelsPerUnit(pPU) { }
 protected:
     float pixelsPerUnit = 1.0;
 };
 
 class CameraActor : public Actor {
 public:
-    Camera* camera = new Camera((Actor*)this);
+    Camera* camera = new Camera((Actor*)this, 1.0, {});
     using Actor::Actor;
-    explicit CameraActor(float pPU) : CameraActor() {
+    explicit CameraActor(float pPU = 1.0, Transform trans = {}) : CameraActor(trans) {
         camera->setPixelsPerUnit(pPU);
     }
 };

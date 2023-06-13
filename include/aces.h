@@ -35,9 +35,9 @@ public:
 
     virtual ~Entity() = default;
 
-    explicit Entity(Entity* prnt);
-    explicit Entity(Component* prnt) : Entity((Entity*)prnt) { };
-    explicit Entity(Actor* prnt) : Entity((Entity*)prnt) { };
+    explicit Entity(Entity* prnt, Transform trans = {});
+    explicit Entity(Component* prnt, Transform trans = {}) : Entity((Entity*)prnt, trans) { };
+    explicit Entity(Actor* prnt, Transform trans = {}) : Entity((Entity*)prnt, trans) { };
 
     [[nodiscard]] inline Transform getAbsoluteTransform() const { // NOLINT(misc-no-recursion)
         auto* pp = getParent();
@@ -63,8 +63,7 @@ private:
 class Component : public Entity {
 public:
     using Entity::Entity;
-    explicit Component() = delete;
-    explicit Component(Entity* prnt) = delete;
+    explicit Component(Entity* prnt, Transform trans = {}) = delete;
 };
 
 class Actor : public Entity {
@@ -73,6 +72,7 @@ public:
     // look into copying later
     // Actor& operator=(const Actor&) = delete;  // Disallow copying
     explicit Actor();
+    explicit Actor(Transform trans);
     [[nodiscard]] bool isMarkedForDeath() const { return markedForDeath; }
 protected:
     friend class Manager;

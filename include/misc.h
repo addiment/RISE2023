@@ -99,7 +99,7 @@ typedef union SizeVec2 {
 typedef class Transform {
 public:
     Transform() = default;
-    explicit Transform(FVec2 p = { 0, 0 }, FVec2 s = { 1, 1 }, float r = 0) : pos(p), scale(s), rot(r) { }
+    explicit Transform(FVec2 p, FVec2 s = { 1, 1 }, float r = 0) : pos(p), scale(s), rot(r) { }
     FVec2 pos = { 0, 0 };
     FVec2 scale = { 1, 1 };
     // rot is in RADIANS 99% of the time!
