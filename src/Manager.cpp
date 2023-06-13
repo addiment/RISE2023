@@ -72,9 +72,11 @@ int Manager::play(int argc, char* argv[], SceneFactory initialSceneFactory, cons
 }
 
 int Manager::init(const char* windowName) {
-
 #pragma region Steam Init
 #ifdef USE_STEAM
+    if (SteamAPI_RestartAppIfNecessary(k_uAppIdInvalid)) {
+        return 1;
+    }
     // Initialize Steam API
     if (!SteamAPI_Init()) {
         SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize Steam API!");

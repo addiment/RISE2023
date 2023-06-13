@@ -10,7 +10,8 @@
 class Player : public Pawn {
 public:
 
-    Sprite* sprite;
+    Sprite *sprite;
+    PlayerHUD *hud = new PlayerHUD(this);
 
     struct {
         SoundSystem::Sound jump = SoundSystem::Sound{ SoundSystem::EFFECT, 96 };
