@@ -15,8 +15,8 @@ Scene* Manager::currentScene = nullptr;
 Scene* scheduledSceneChange = nullptr;
 IVec2 windowSize = { 640, 640 };
 [[maybe_unused]] IVec2 lastWindowedSize = { 640, 640 };
-
-size_t gameTicksSinceSceneLoad = 0;
+uint64_t lastTickStartTime = 0;
+uint64_t gameTicksSinceSceneLoad = 0;
 
 void Manager::changeScene(Scene* scene) {
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "MANAGER Changing to scene (%s)", (scene->getSceneName() ? scene->getSceneName() : "unnamed"));
@@ -163,6 +163,7 @@ void Manager::shutdown() {
 
     IMG_Quit();
     Mix_Quit();
+    TTF_Quit();
     SDL_Quit();
 
 #ifdef USE_STEAM
@@ -173,6 +174,10 @@ void Manager::shutdown() {
 }
 
 void Manager::tick() {
+    uint64_t tickTime = SDL_GetPerformanceCounter();
+    double delta = (double)(tickTime - lastTickStartTime) / (double)SDL_GetPerformanceFrequency();
+    printf("%f", delta);
+    lastTickStartTime = tickTime;
 
 #pragma region SDL_PollEvent
     SDL_Event ev;
@@ -211,8 +216,7 @@ void Manager::tick() {
     }
 #pragma endregion SDL_PollEvent
 
-    // TODO: delta can't be a constant- measure render time!
-    double delta = 0.01666666666666666666666666666;
+
 
 #ifdef USE_STEAM
     SteamAPI_RunCallbacks();

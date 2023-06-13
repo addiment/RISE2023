@@ -12,6 +12,7 @@
 #include <SDL2/SDL_main.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL_ttf.h>
 //#include <GL/glew.h>
 
 #define DEBUG_LINECHECK SDL_Log("%s line %d", __FILE_NAME__, __LINE__);

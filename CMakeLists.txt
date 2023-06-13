@@ -18,6 +18,7 @@ include(FindPkgConfig)
 find_package(SDL2 REQUIRED)
 pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image>=2.0.0)
 pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer>=2.0.0)
+pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf>=2.0.0)
 find_package(Steamworks REQUIRED)
 
 add_compile_options(-Wall -O2)
@@ -31,7 +32,7 @@ endif()
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DCMAKE_BUILD_DEBUG") # some #ifdef directives in the code use CMAKE_BUILD_DEBUG
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DCMAKE_BUILD_RELEASE") # some #ifdef directives in the code use CMAKE_BUILD_DEBUG
 
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${STEAMWORKS_INCLUDE_DIRS})
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS} ${STEAMWORKS_INCLUDE_DIRS})
 
 set_source_files_properties(res/toolkit.rc PROPERTIES CMAKE_CONFIGURE_DEPENDS res/icon.ico )
 
@@ -58,4 +59,4 @@ add_executable(${PROJECT_NAME}
     include/scenes/TestScene.hpp
     include/EzInputSys.h
     include/components/Sprite.hpp include/SpriteSheet.h src/SpriteSheet.cpp src/Camera.cpp include/EzSoundSys.h src/EzSoundSys.cpp include/components/UserInterface.h include/components/PlayerHUD.h)
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${STEAMWORKS_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${STEAMWORKS_LIBRARIES})
