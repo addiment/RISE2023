@@ -165,7 +165,7 @@ void Manager::shutdown() {
 
     IMG_Quit();
     Mix_Quit();
-    TTF_Quit();
+//    TTF_Quit();
     SDL_Quit();
 
 #ifdef USE_STEAM

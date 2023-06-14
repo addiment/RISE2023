@@ -20,7 +20,7 @@ void Camera::draw(SDL_Texture *texture, const SDL_Rect* srcrect, Transform t, in
         float(t.scale.y * (cos(theta) * d.y + sin(theta) * d.y) / privTrans.scale.x)
     };
 
-    const SDL_FRect rect = {tlRotated.x, tlRotated.y, t.scale.x / privTrans.scale.x, t.scale.y / privTrans.scale.x };
+    const SDL_FRect rect = {tlRotated.x, -tlRotated.y, t.scale.x / privTrans.scale.x, t.scale.y / privTrans.scale.x };
     // apparently my home-grown rotation math was unnecessary? oops, lmao
     // too lazy to simplify ngl
     const SDL_FPoint center = { 0, 0 };

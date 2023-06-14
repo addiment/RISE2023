@@ -28,7 +28,7 @@ namespace Scenes {
                 SoundSystem::playMusic();
             }
 
-            activePawn = new Player();
+            activePawn = new Player( Transform{ { 64, 64 }, { 1, 1 }, 0 } );
             activeCamera = (new CameraActor())->camera;
         };
 

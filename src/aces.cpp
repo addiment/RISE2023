@@ -27,7 +27,7 @@ void Entity::onPlay() { // NOLINT(misc-no-recursion)
     if (!hasRunPlay) for (auto & it : children) it->onPlay();
 }
 
-Entity::Entity(Entity* prnt, Transform trans) : parent(prnt), transform(trans) {
+Entity::Entity(Entity* prnt, Transform trans) : parent(prnt), handle(new Handle(this)), transform(trans) {
     if (!parent->canHaveChildren()) throw runtime_error("Tried to attach a new entity to an entity that can't have children!");
     parent->getChildren().push_back(this);
 };

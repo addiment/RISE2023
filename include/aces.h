@@ -24,21 +24,36 @@ class Component;
 
 class Entity : public Nickable {
 public:
+
+    class Handle {
+    public:
+        [[nodiscard]] inline Entity& get() const { return *target; }
+        explicit Handle() = delete;
+    private:
+        friend class Entity;
+        std::unordered_set<Handle* const *> holders;
+        explicit Handle(Entity* fren) : holders({ }), target(fren)  { }
+        Entity* target;
+    };
+
     [[nodiscard]] std::vector<Entity *> & getChildren();
     [[nodiscard]] Entity* getParent() const;
 
-    [[nodiscard]] virtual const bool canHaveChildren() const { return true; }
+    [[nodiscard]] virtual bool canHaveChildren() const { return true; }
 
     virtual void onPlay();
     virtual void update(double delta);
     virtual void render();
 
-    virtual ~Entity() = default;
+    [[nodiscard]] inline Handle* getHandle() const { return handle; }
 
+    virtual ~Entity() { handle->target = nullptr; };
+
+    explicit Entity() = delete;
     explicit Entity(Entity* prnt, Transform trans = {});
     explicit Entity(Component* prnt, Transform trans = {}) : Entity((Entity*)prnt, trans) { };
-    explicit Entity(Actor* prnt, Transform trans = {}) : Entity((Entity*)prnt, trans) { };
 
+    explicit Entity(Actor* prnt, Transform trans = {}) : Entity((Entity*)prnt, trans) { };
     [[nodiscard]] inline Transform getAbsoluteTransform() const { // NOLINT(misc-no-recursion)
         auto* pp = getParent();
         if (pp) {
@@ -47,17 +62,25 @@ public:
     }
     [[nodiscard]] inline Transform& getRelativeTransform() { return transform; }
     void setRelativeTransform(Transform t) { transform = t; }
+protected:
+    friend class Manager;
+    friend class Component;
+    friend class Actor;
+
+    friend class Handle;
+    inline Entity *operator&() { return this; } // NOLINT(google-runtime-operator)
 private:
     friend class Manager;
     friend class Component;
     friend class Actor;
 
+    friend class Handle;
     std::vector<Entity*> children{};
     Entity* parent = nullptr;
     bool hasRunPlay = false;
-    Transform transform = Transform{ { 0, 0 }, { 1, 1 }, 0 };
+    Handle* const handle;
 
-    explicit Entity() = default;
+    Transform transform = Transform{ { 0, 0 }, { 1, 1 }, 0 };
 };
 
 class Component : public Entity {

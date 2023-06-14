@@ -17,7 +17,7 @@ public:
     SDL_FPoint topLeft = { 9, 9 };
     // maxHealth = numHearts * 2
     const int numHearts = 2;
-    int health = 2;
+    int health = numHearts * 2;
     float heartScale = 2;
 
     void onPlay() override {

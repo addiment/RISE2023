@@ -10,6 +10,8 @@
 class Player : public Pawn {
 public:
 
+    using Pawn::Pawn;
+
     Sprite *sprite;
     PlayerHUD *hud = new PlayerHUD(this);
 
