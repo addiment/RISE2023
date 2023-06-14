@@ -1,6 +1,6 @@
 #pragma once
-#ifndef RISE_SPRITE_HPP
-#define RISE_SPRITE_HPP
+#ifndef TOOLKITENGINEV3_SPRITE_HPP
+#define TOOLKITENGINEV3_SPRITE_HPP
 
 #include <tkev3.h>
 
@@ -64,4 +64,4 @@ public:
     }
 };
 
-#endif // RISE_SPRITE_HPP
+#endif // TOOLKITENGINEV3_SPRITE_HPP

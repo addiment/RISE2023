@@ -1,6 +1,6 @@
 #pragma once
-#ifndef RISE_EZINPUTSYS_H
-#define RISE_EZINPUTSYS_H
+#ifndef TOOLKITENGINEV3_EZINPUTSYS_H
+#define TOOLKITENGINEV3_EZINPUTSYS_H
 
 #include <unordered_map>
 #include <unordered_set>
@@ -47,4 +47,4 @@ private:
     static void init();
 };
 
-#endif // RISE_EZINPUTSYS_H
+#endif // TOOLKITENGINEV3_EZINPUTSYS_H

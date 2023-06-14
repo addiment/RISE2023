@@ -1,6 +1,6 @@
 #pragma once
-#ifndef RISE_EZSOUNDSYS_H
-#define RISE_EZSOUNDSYS_H
+#ifndef TOOLKITENGINEV3_EZSOUNDSYS_H
+#define TOOLKITENGINEV3_EZSOUNDSYS_H
 
 #include "misc.h"
 #include "Nickable.h"
@@ -51,4 +51,4 @@ private:
     SoundSystem() = default;
 };
 
-#endif // RISE_EZSOUNDSYS_H
+#endif // TOOLKITENGINEV3_EZSOUNDSYS_H
