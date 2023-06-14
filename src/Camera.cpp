@@ -2,7 +2,7 @@
 #include "Manager.h"
 #include <cmath>
 
-void Camera::draw(SDL_Texture *texture, const SDL_Rect* srcrect, Transform t, SDL_RendererFlip flip) const {
+void Camera::draw(SDL_Texture *texture, const SDL_Rect* srcrect, Transform t, int32_t layer, SDL_RendererFlip flip) const {
     if (!texture) return;
 
     Transform privTrans = getAbsoluteTransform();
@@ -27,7 +27,7 @@ void Camera::draw(SDL_Texture *texture, const SDL_Rect* srcrect, Transform t, SD
     // TODO: fix this
     const SDL_Rect srect = { srcrect->x, srcrect->y, srcrect->w, srcrect->h };
     printf("\n(RELATIVE) x = %f, y = %f\n(ABSOLUTE) x = %f, y = %f\n\n", t.pos.x, t.pos.y, rect.x, rect.y);
-    SDL_SetRenderDrawColor(Manager::renderer, 0xFF, 0xFF, 0x00, 0x80);
-    SDL_RenderFillRectF(Manager::renderer, &rect);
+//    SDL_SetRenderDrawColor(Manager::renderer, 0xFF, 0xFF, 0x00, 0x80);
+//    SDL_RenderFillRectF(Manager::renderer, &rect);
     SDL_RenderCopyExF(Manager::renderer, texture, &srect, &rect, t.rot - privTrans.rot, &center, (SDL_RendererFlip)flip);
 }

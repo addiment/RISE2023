@@ -15,12 +15,9 @@ InputSystem::ActionSet activeActionSet;
 
 void InputSystem::init() {
 
-
-
     // Digital actions
     digitalActionHandles[(size_t)InputSystem::DigitalAction::Jump           ] = SteamAPI_ISteamInput_GetDigitalActionHandle(SteamAPI_SteamInput(), "jump");
     digitalActionHandles[(size_t)InputSystem::DigitalAction::Special        ] = SteamAPI_ISteamInput_GetDigitalActionHandle(SteamAPI_SteamInput(),"special");
-//    digitalActionHandles[(size_t)InputSystem::DigitalAction::PauseMenu      ] = SteamInput_GetDigitalActionHandle("pause_menu"); // WRONG
     digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuUp         ] = SteamAPI_ISteamInput_GetDigitalActionHandle(SteamAPI_SteamInput(),"menu_up");
     digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuDown       ] = SteamAPI_ISteamInput_GetDigitalActionHandle(SteamAPI_SteamInput(),"menu_down");
     digitalActionHandles[(size_t)InputSystem::DigitalAction::MenuLeft       ] = SteamAPI_ISteamInput_GetDigitalActionHandle(SteamAPI_SteamInput(),"menu_left");
@@ -71,4 +68,12 @@ bool InputSystem::getDigitalActionValue(DigitalAction action) {
 
 InputSystem::ActionSet InputSystem::getCurrentActionSet() {
     return activeActionSet;
+}
+
+void InputSystem::setAction(InputSystem::DigitalAction digitalAction, bool value) {
+
+}
+
+void InputSystem::setAction(InputSystem::AnalogAction analogAction, FVec2 value) {
+
 }

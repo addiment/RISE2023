@@ -8,8 +8,14 @@
 
 class Camera : public Component {
 public:
+    enum RenderLayer : int32_t {
+        LAYER_BACKGROUND = -(1 << 30),
+        LAYER_FOREGROUND = 0,
+        LAYER_INTERFACE = (1 << 30),
+    };
     // flip is value of SDL_RendererFlip
-    void draw(SDL_Texture* texture, const SDL_Rect* srcrect, Transform t, SDL_RendererFlip flip = SDL_FLIP_NONE) const;
+    // TODO: actually acknowledge layers
+    void draw(SDL_Texture* texture, const SDL_Rect* srcrect, Transform t, int32_t layer = LAYER_FOREGROUND, SDL_RendererFlip flip = SDL_FLIP_NONE) const;
     using Component::Component;
 
     [[nodiscard]] inline float getPixelsPerUnit() const { return pixelsPerUnit; }

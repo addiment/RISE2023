@@ -31,6 +31,7 @@ namespace Scenes {
             activePawn = new Player();
             activeCamera = (new CameraActor())->camera;
         };
+
         void update(double delta) override { }
 
     };

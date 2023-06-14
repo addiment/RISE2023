@@ -116,7 +116,7 @@ int Manager::init(const char* windowName) {
 #pragma region SDL2_mixer Init
     // Init SDL2_image
     {
-        int flags = MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG | MIX_INIT_OPUS;
+        int flags = MIX_INIT_MP3;
         int res = Mix_Init(flags);
         if (res != flags) {
             SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL_mixer: %s", Mix_GetError());
@@ -217,8 +217,6 @@ void Manager::tick() {
         }
     }
 #pragma endregion SDL_PollEvent
-
-
 
 #ifdef USE_STEAM
     SteamAPI_RunCallbacks();
